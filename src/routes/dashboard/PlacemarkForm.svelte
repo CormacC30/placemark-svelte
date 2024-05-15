@@ -1,27 +1,30 @@
 <script lang="ts">
+import type { Placemark } from "$lib/types/placemark-types";
+import { placemarkService } from "$lib/services/placemark-service";
+import { currentSession } from "$lib/stores";
+import { get } from "svelte/store";
+
 let name = '';
-  let category = '';
+  
+let category = '';
+let message = "Create a new Placemark";
+
   const categories = ['Bronze Age', 'Iron Age', 'Medieval'];
 
   async function addPlacemark() {
-
     console.log(`Just added new place of interest: ${name}, from the ${category}`);
-    /*
-      const response = await fetch('/api/placemarks', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ name, category })
-    });
-    if (response.ok) {
-      // handle success, maybe clear form or display a success message
-      name = '';
-      category = '';
-    } else {
-      // handle error
-      console.error('Failed to add placemark');
+    if (name && category) {
+        const placemark: Placemark = {
+            name: name,
+            category: category,
+        };
+        const success = await placemarkService.addPlacemark(placemark, get(currentSession));
+        if (!success) {
+            message = "Placemark could not be successfully added - some error occurred";
+            return;
+        }
+        message = `Thanks! You have added ${name} (${category})`;
     }
-    */
-
   }
 </script>
 
@@ -32,5 +35,10 @@ let name = '';
         <option value={categoryOption}>{categoryOption}</option>
       {/each}
     </select>
-    <button type="submit">Add Placemark</button>
+    <button class="is-warning is-fullwidth">Add Placemark</button>
   </form>
+  <div class="box mt-5">
+    <div class="content has-text-centered">
+        {message}
+    </div>
+  </div>

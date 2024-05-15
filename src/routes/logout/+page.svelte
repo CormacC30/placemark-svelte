@@ -2,7 +2,6 @@
     import { goto } from "$app/navigation";
     import { currentSession } from "$lib/stores";
   
-    currentSession.set("");
-  
+    currentSession.set({ name: "", _id: "", token: "" });
     goto("/");
   </script>
