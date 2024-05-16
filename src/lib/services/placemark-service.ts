@@ -86,14 +86,14 @@ export const placemarkService = {
     }
   },
 
-  async getPlacemarkSites(session: Session, placemark: Placemark): Promise<Site[] | null> {
+  async getPlacemarkSites(session: Session, placemark: Placemark): Promise<Site[]> {
     try {
       setAuthToken(session.token);
       const response = await axios.get(`${this.baseUrl}/api/placemarks/${placemark._id}/sites`);
       return response.data;
     } catch (error) {
       console.error('Get placemark sites error:', error);
-      return null;
+      return [];
     }
   },
 
@@ -101,7 +101,7 @@ export const placemarkService = {
     try {
       setAuthToken(session.token);
       const response = await axios.post(`${this.baseUrl}/api/placemarks/${placemark._id}/sites`, site);
-      return response.status === 200;
+      return response.status === 200 || response.status === 201;
     } catch (error) {
       console.error('Add site error:', error);
       return false;

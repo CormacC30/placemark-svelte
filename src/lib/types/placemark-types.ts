@@ -19,7 +19,7 @@ export interface Site {
     longitude: number;
     year: number;
     era: string;
-    placemark: Placemark | string;
+    placemarkid: string;
     _id?: string;
   }
   
