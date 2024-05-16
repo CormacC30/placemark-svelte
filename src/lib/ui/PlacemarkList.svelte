@@ -1,47 +1,21 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import type { Placemark } from "$lib/types/placemark-types";
+  import { placemarkService } from "$lib/services/placemark-service";
+  import { get, writable } from "svelte/store";
+  import { currentSession, placemarkList } from "$lib/stores";
+  import { onMount } from "svelte";
 
-  // export let placemarks: Placemark[];
-
-  function navigateToPlacemark(id: string) {
+  function navigateToPlacemark(id: string | undefined) {
     goto(`/placemark/${id}`);
   }
 
-  export let placemarkList: Placemark[] = [];
-    /*
-    {
-      name: "West Cork",
-      category: "Bronze Age",
-      _id: "aaaaa",
-      sites: [
-        {
-          title: "Altar",
-          year: 2000,
-          era: "BC",
-          latitude: 51.513756,
-          longitude: -9.644037,
-          description: "Altar Wedge Tomb is a wedge-shaped gallery grave and national monument located outside the village of Schull, in County Cork, Ireland.",
-          placemarkid: "aaaaa"
-        },
-        {
-          title: "Kealkill Stone Circle",
-          year: 2500,
-          era: "BC",
-          latitude: 51.745339,
-          longitude: -9.370591,
-          description: "Kealkill stone circle is a Bronze Age axial five-stone circle located just outside the village of Kealkill, County Cork in southwest Ireland. ",
-          placemarkid: "aaaaa"
-        }
-      ]
-    },
-    {
-      name: "Kilkenny",
-      category: "Medieval",
-      _id: "bbbbb"
-    }
-  ];
-  */
+  onMount(async() => {
+    const session = get(currentSession);
+    const placemarks = await placemarkService.getPlacemarks(session);
+    placemarkList.set(placemarks);  // Update the store
+  });
+
 </script>
 
 <table class="table is-fullwidth">
@@ -50,7 +24,7 @@
     <th>Category</th>
   </thead>
   <tbody>
-    {#each placemarkList as placemark}
+    {#each $placemarkList as placemark}  <!-- Use the store -->
       <tr>
         <td>
           {placemark.name}
@@ -59,10 +33,11 @@
           {placemark.category}
         </td>
         <td>
-          <button class="button is-warning"><i class="fas fa-folder-open"></i> View</button>
+          <button class="button is-warning" on:click={() => navigateToPlacemark(placemark._id)}>
+            <i class="fas fa-folder-open"></i> View
+          </button>
         </td>
       </tr>
     {/each}
   </tbody>
 </table>
-

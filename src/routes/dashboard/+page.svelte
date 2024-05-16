@@ -6,13 +6,9 @@
     import { onMount } from "svelte";
     import { get } from "svelte/store";
     import type { Placemark } from "$lib/types/placemark-types";
+    import PlacemarkList from "$lib/ui/PlacemarkList.svelte";
 
-    let placemarkList: Placemark[] = [];
     subTitle.set("Create a New Placemark");
-
-    onMount(async () => {
-        placemarkList = await placemarkService.getPlacemarks(get(currentSession));
-    });
 
 </script>
 
@@ -20,5 +16,5 @@
     <PlacemarkForm />
 </Card>
 <Card title="All Current Places of Interest:">
-    
+    <PlacemarkList />
 </Card>

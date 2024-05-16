@@ -1,5 +1,8 @@
-import { writable } from "svelte/store";
-import type { Session } from "$lib/types/placemark-types";
+// stores.ts
+import { writable } from 'svelte/store';
+import type { Session, Placemark } from '$lib/types/placemark-types';
 
 export const subTitle = writable<string>();
 export const currentSession = writable<Session>();
+export const placemarkList = writable<Placemark[]>([]);
+
