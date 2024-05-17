@@ -64,10 +64,10 @@ export const placemarkService = {
     }
   },
 
-  async deletePlacemark(session: Session, placemark: Placemark): Promise<boolean> {
+  async deletePlacemark(session: Session, id: string): Promise<boolean> {
     try {
       setAuthToken(session.token);
-      const response = await axios.delete(`${this.baseUrl}/api/placemarks/${placemark._id}`);
+      const response = await axios.delete(`${this.baseUrl}/api/placemarks/${id}`);
       return response.status === 204; 
     } catch (error) {
       console.error('Delete placemark error:', error);

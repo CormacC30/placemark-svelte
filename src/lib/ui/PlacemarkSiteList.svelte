@@ -21,7 +21,7 @@
 
   async function deleteSite(site: Site) {
     const session = get(currentSession);
-    if (!session || !site._id) return; // Ensure session and site._id are defined
+    if (!session || !site._id) return; 
     const success = await placemarkService.deleteSite(session, site._id);
     if (success) {
       sites = sites.filter((s) => s._id !== site._id);
