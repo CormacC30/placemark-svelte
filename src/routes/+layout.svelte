@@ -5,7 +5,7 @@
   import Menu from "$lib/ui/Menu.svelte";
 
   if (browser) {
-    const savedSession = localStorage.donation;
+    const savedSession = localStorage.placemark;
     if (savedSession) {
       const session = JSON.parse(savedSession);
       currentSession.set(session);

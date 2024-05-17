@@ -22,8 +22,9 @@ export const placemarkService = {
     try {
       const response = await axios.post(`${this.baseUrl}/api/users/authenticate`, { email, password });
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token); // Store token
-        setAuthToken(response.data.token); // Set token globally in Axios
+        axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+        // localStorage.setItem('token', response.data.token); // Store token
+        // setAuthToken(response.data.token); // Set token globally in Axios
         const session: Session = {
           name: response.data.name,
           token: response.data.token,
