@@ -7,14 +7,14 @@
       <div class="navbar-brand">
         <a class="navbar-item" href="/dashboard">
           <span class="icon"> <i class="fas fa-map-marker-alt"></i></span><span class="icon mr-1"> 
-            <i class="fa-solid fa-chess-rook"></i></span><span><strong>Tombster</strong>
+            <i class="fas fa-chess-rook"></i></span><span><strong>Tombster</strong>
             </span>
         </a>
       </div>
       <div id="navbarMenu" class="navbar-menu">
         <div class="navbar-end">
           <a class="navbar-item" href="/dashboard"> Dashboard </a>
-          <a class="navbar-item" href="/report"> Report </a>
+          <a class="navbar-item" href="/summary"> Site Summary </a>
           <a class="navbar-item" href="/logout"> Logout [{$currentSession.name}]</a>
         </div>
         <div></div>

@@ -97,6 +97,17 @@ export const placemarkService = {
     }
   },
 
+  async getUserSites(session: Session): Promise<Site[]> {
+    try {
+      setAuthToken(session.token);
+      const response = await axios.get(`${this.baseUrl}/api/sites/user`);
+      return response.data;
+    } catch (error) {
+      console.error("Error retrieving user sites", error);
+      return[];
+    }
+  },
+
   async addSite(session: Session, placemark: Placemark, site: Site): Promise<boolean> {
     try {
       setAuthToken(session.token);
