@@ -119,10 +119,10 @@ export const placemarkService = {
     }
   },
 
-  async deleteSite(session: Session, site: Site): Promise<boolean> {
+  async deleteSite(session: Session, id: string): Promise<boolean> {
     try {
       setAuthToken(session.token);
-      const response = await axios.delete(`${this.baseUrl}/api/sites/${site._id}`);
+      const response = await axios.delete(`${this.baseUrl}/api/sites/${id}`);
       return response.status === 204;
     } catch (error) {
       console.error('Delete site error:', error);
