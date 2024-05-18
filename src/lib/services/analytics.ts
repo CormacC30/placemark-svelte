@@ -1,5 +1,5 @@
 import type { Placemark, Site } from "$lib/types/placemark-types";
-import type { Categories } from "$lib/types/analytics-types";
+import type { Categories, ChartData } from "$lib/types/analytics-types";
 
 export function getSiteAge(site: Site) {
   let correctYear = 0;
@@ -62,5 +62,28 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
         labels,
         datasets: [{ values: averageAges }],
       },
+    };
+  }
+
+  export function categorisePlacemarks(placemarks: Placemark[]): { [key: string]: number } {
+    const categories: { [key: string]: number } = {};
+  
+    placemarks.forEach((placemark) => {
+      if (!categories[placemark.category]) {
+        categories[placemark.category] = 0;
+      }
+      categories[placemark.category]++;
+    });
+  
+    return categories;
+  }
+  
+  export function getPlacemarkChartData(categories: { [key: string]: number }): ChartData {
+    const labels = Object.keys(categories);
+    const values = Object.values(categories);
+  
+    return {
+      labels,
+      datasets: [{ values }],
     };
   }
