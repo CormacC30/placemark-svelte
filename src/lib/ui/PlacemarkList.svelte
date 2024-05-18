@@ -3,7 +3,7 @@
   import type { Placemark } from "$lib/types/placemark-types";
   import { placemarkService } from "$lib/services/placemark-service";
   import { get, writable } from "svelte/store";
-  import { currentSession, placemarkList } from "$lib/stores";
+  import { currentSession, placemarkStore } from "$lib/stores";
   import { onMount } from "svelte";
 
   let placemarks: Placemark[] = [];
@@ -15,7 +15,7 @@
   onMount(async() => {
     const session = get(currentSession);
     placemarks = await placemarkService.getPlacemarks(session);
-    placemarkList.set(placemarks);  // Update the store
+    placemarkStore.set(placemarks);  // Update the store
   });
 
   async function deletePlacemark(placemark: Placemark) {
@@ -24,7 +24,7 @@
     const success = await placemarkService.deletePlacemark(session, placemark._id);
     if (success) {
       placemarks = placemarks.filter((p) => p._id !== placemark._id);
-      placemarkList.set(placemarks);
+      placemarkStore.set(placemarks);
     } else {
       console.error("Failed to delete Placemark");
     }
@@ -40,7 +40,7 @@
     <th></th>
   </thead>
   <tbody>
-    {#each $placemarkList as placemark}  <!-- Use the store -->
+    {#each $placemarkStore as placemark}  <!-- Use the store -->
       <tr>
         <td>
           {placemark.name}

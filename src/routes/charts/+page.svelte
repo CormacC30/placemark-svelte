@@ -6,8 +6,10 @@
   import Card from "$lib/ui/Card.svelte";
   import type { ChartData } from "$lib/types/analytics-types";
   import { onMount } from "svelte";
-  import { currentSession } from "$lib/stores";
+  import { currentSession, subTitle } from "$lib/stores";
   import { get } from "svelte/store";
+  
+  subTitle.set("Your Tombster Data");
 
   let siteCountsData: ChartData | null = null;
   let averageAgesData: ChartData | null = null;

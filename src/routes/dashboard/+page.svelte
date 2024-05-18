@@ -7,6 +7,7 @@
     import PlacemarkList from "$lib/ui/PlacemarkList.svelte";
     import type { Placemark, Session } from "$lib/types/placemark-types";
     import type { ChartData } from "$lib/types/analytics-types";
+    import { placemarkStore } from "$lib/stores";
     import { onMount } from "svelte";
     import { placemarkService } from "$lib/services/placemark-service";
     import { categorisePlacemarks, getPlacemarkChartData } from "$lib/services/analytics";
@@ -17,14 +18,24 @@
     let session: Session;
     let placemarks: Placemark[] = [];
     let placemarkChartData: ChartData | null = null;
+
+    async function updateChart() {
+    const categories = categorisePlacemarks(placemarks);
+    placemarkChartData = getPlacemarkChartData(categories);
+  }
   
     onMount(async () => {
       session = get(currentSession);
       if (session) {
         placemarks = await placemarkService.getPlacemarks(session);
-        const categories = categorisePlacemarks(placemarks);
-        placemarkChartData = getPlacemarkChartData(categories);
+        placemarkStore.set(placemarks);
+        await updateChart();
       }
+    });
+
+    placemarkStore.subscribe(async (newPlacemarks) => {
+      placemarks = newPlacemarks;
+      await updateChart();
     });
   </script>
   

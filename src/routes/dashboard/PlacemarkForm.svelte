@@ -1,6 +1,6 @@
 <script lang="ts">
   import { placemarkService } from '$lib/services/placemark-service';
-  import { currentSession, placemarkList } from '$lib/stores';
+  import { currentSession, placemarkStore } from '$lib/stores';
   import { get } from 'svelte/store';
 
   let name = '';
@@ -18,7 +18,7 @@
     const success = await placemarkService.addPlacemark(placemark, session);
     if (success) {
       const updatedPlacemarks = await placemarkService.getPlacemarks(session);
-      placemarkList.set(updatedPlacemarks);
+      placemarkStore.set(updatedPlacemarks);
       message = `Thanks! You have added ${name} (${category})`;
     } else {
       message = 'Placemark could not be successfully added - some error occurred';
