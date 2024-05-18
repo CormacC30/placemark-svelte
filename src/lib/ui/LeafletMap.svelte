@@ -2,7 +2,7 @@
   import "leaflet/dist/leaflet.css";
   import { onMount } from "svelte";
   import type { Control, Map as LeafletMap } from "leaflet";
-  import L from "leaflet";
+  import L, { marker, popup } from "leaflet";
 
   export let id = "home-map-id";
   export let height = "80";
@@ -16,8 +16,15 @@
   let overlays: Control.LayersObject = {};
   let baseLayers: any;
 
-  export function addMarker(lat: number, lng: number) {
-    L.marker([lat, lng]).addTo(imap);
+  export function addMarker(lat: number, lng: number, popupText: string) {
+    const marker = L.marker([lat, lng]).addTo(imap);
+    const popup = L.popup({ autoClose: false, closeOnClick: false });
+    popup.setContent(popupText);
+    marker.bindPopup(popup);
+  }
+
+  export function moveTo(lat: number, lng: number) {
+    imap.flyTo({ lat: lat, lng: lng });
   }
 
   onMount(async () => {
