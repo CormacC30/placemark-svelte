@@ -2,9 +2,11 @@
     import { page } from '$app/stores';
     import { placemarkService } from '$lib/services/placemark-service';
     import { get } from 'svelte/store';
-    import type { Site } from '$lib/types/placemark-types';
+    import type { Placemark, Site } from '$lib/types/placemark-types';
     import { currentSession, siteList } from '$lib/stores';
     import Coordinates from '$lib/ui/Coordinates.svelte';
+
+    export let placemark: Placemark;
 
     let newSiteTitle = "";
     let newSiteYear = 0;
@@ -13,12 +15,11 @@
     let latitude = 0;
     let longitude = 0;
     let newSiteDescription = "";
-    let message = '';
+    let message = "";
 
     async function addSite() {
       const session = get(currentSession);
-      const { id } = get(page).params;
-      if (!session || !id) return;
+      if (!session || !placemark._id) return;
   
       const site: Site = {
         title: newSiteTitle,
@@ -27,12 +28,12 @@
         longitude: longitude,
         year: newSiteYear,
         era: selectedEra,
-        placemarkid: id, 
+        placemarkid: placemark._id, 
       };
   
-      const success = await placemarkService.addSite(session, { _id: id, name: '', category: '' }, site);
+      const success = await placemarkService.addSite(session, placemark, site);
       if (success) {
-        const sites = await placemarkService.getPlacemarkSites(session, { _id: id, name: '', category: '' });
+        const sites = await placemarkService.getPlacemarkSites(session, placemark);
         siteList.set(sites);
         newSiteTitle = '';
         newSiteDescription = '';

@@ -17,7 +17,7 @@
 
   let session: Session;
   let placemarks: Placemark[] = [];
-  let sites: Site[] = []
+  let sites: Site[] = [];
   let placemarkChartData: ChartData | null = null;
   let map: LeafletMap;
 
@@ -42,27 +42,24 @@
       sites.forEach((site) => {
         popup = `${site.title}, Category: ${placemark.category}`;
         map.addMarker(site.latitude, site.longitude, popup);
-      }); 
+      });
     }
-    const lastSite = sites[sites.length -1];
-    if (lastSite) map.moveTo(lastSite.latitude, lastSite.longitude);
+
   });
 
   placemarkStore.subscribe(async (newPlacemarks) => {
-
     placemarks = newPlacemarks;
     await updateChart();
-
-    siteList.subscribe(async (newSites) => {
-    sites = newSites;
   });
-    for (const placemark of placemarks){
-      sites.forEach((site) => {
-        const popup = `${site.title}, Category: ${placemark.category}`;
-        map.addMarker(site.latitude, site.longitude, popup);
-      });
-    }
-    
+
+  siteList.subscribe(async (newSites) => {
+    sites = newSites;
+    sites.forEach((site) => {
+      const popup = `${site.title}`;
+      map.addMarker(site.latitude, site.longitude, popup);
+    });
+    const lastSite = sites[sites.length - 1];
+    if (lastSite) map.moveTo(lastSite.latitude, lastSite.longitude);
   });
 </script>
 

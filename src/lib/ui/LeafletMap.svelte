@@ -2,7 +2,7 @@
   import "leaflet/dist/leaflet.css";
   import { onMount } from "svelte";
   import type { Control, Map as LeafletMap } from "leaflet";
-  import L, { marker, popup } from "leaflet";
+  import L, { gridLayer, marker, popup } from "leaflet";
 
   export let id = "home-map-id";
   export let height = "80";
@@ -38,6 +38,7 @@
       Satellite: leaflet.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
         attribution: "Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community"
       })
+      
     };
     let defaultLayer = baseLayers[activeLayer];
     imap = leaflet.map(id, {
@@ -47,8 +48,10 @@
       layers: [defaultLayer]
     });
     control = leaflet.control.layers(baseLayers, overlays).addTo(imap);
+    imap.getContainer().style.zIndex = "1";
   });
+
+  
 </script>
 
 <div {id} class="box" style="height: {height}vh" />
-

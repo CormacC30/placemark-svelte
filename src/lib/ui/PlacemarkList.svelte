@@ -5,11 +5,25 @@
   import { get, writable } from "svelte/store";
   import { currentSession, placemarkStore } from "$lib/stores";
   import { onMount } from "svelte";
+  import Modal from "$lib/ui/Modal.svelte";
+  import SiteForm from "../../routes/placemark/[id]/SiteForm.svelte";
 
   let placemarks: Placemark[] = [];
+  let isModalOpen = false;
+  let selectedPlacemark: Placemark | null = null;
 
   function navigateToPlacemark(id: string | undefined) {
     goto(`/placemark/${id}`);
+  }
+
+  function openModal(placemark: Placemark) {
+    selectedPlacemark = placemark;
+    isModalOpen = true;
+  }
+
+  function closeModal() {
+    isModalOpen = false;
+    selectedPlacemark = null;
   }
 
   onMount(async() => {
@@ -38,6 +52,7 @@
     <th>Category</th>
     <th></th>
     <th></th>
+    <th></th>
   </thead>
   <tbody>
     {#each $placemarkStore as placemark}  <!-- Use the store -->
@@ -47,6 +62,11 @@
         </td>
         <td>
           {placemark.category}
+        </td>
+        <td>
+          <button class="button is-success" on:click={() => openModal(placemark)}>
+            <i class="fas fa-plus"></i> Add Site
+          </button>
         </td>
         <td>
           <button class="button is-warning" on:click={() => navigateToPlacemark(placemark._id)}>
@@ -62,3 +82,9 @@
     {/each}
   </tbody>
 </table>
+
+<Modal bind:isOpen={isModalOpen} title="Add Site" close={closeModal}>
+  {#if selectedPlacemark}
+    <SiteForm placemark={selectedPlacemark} />
+  {/if}
+</Modal>
