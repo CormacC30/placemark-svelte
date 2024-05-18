@@ -20,7 +20,7 @@ export function getSiteAge(site: Site) {
   const age = correctYear + currentYear;
   return age;
 }
-
+// get the sites per category
 export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categories {
     const categories: Categories = {};
   
@@ -40,7 +40,7 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
   
     return categories;
   }
-
+// returns the chart data for average age and for number of sites
   export function getChartData(categories: Categories) {
     const labels = [];
     const siteCounts = [];

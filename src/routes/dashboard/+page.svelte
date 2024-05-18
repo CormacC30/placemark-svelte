@@ -1,11 +1,8 @@
 <script lang="ts">
     import Card from "$lib/ui/Card.svelte";
-    import { currentSession, subTitle } from "$lib/stores";
+    import { subTitle } from "$lib/stores";
     import PlacemarkForm from "./PlacemarkForm.svelte";
-    import { placemarkService } from "$lib/services/placemark-service";
-    import { onMount } from "svelte";
-    import { get } from "svelte/store";
-    import type { Placemark } from "$lib/types/placemark-types";
+
     import PlacemarkList from "$lib/ui/PlacemarkList.svelte";
 
     subTitle.set("Create a New Placemark");
@@ -15,6 +12,15 @@
 <Card title="Please Add Place of Interest">
     <PlacemarkForm />
 </Card>
-<Card title="All Current Places of Interest:">
-    <PlacemarkList />
-</Card>
+<div class="columns">
+    <div class="column">
+        <Card title="All Current Places of Interest:">
+            <PlacemarkList />
+        </Card>        
+    </div>
+    <div class="column">
+        <Card title="Number of Historic sites per category">
+            
+        </Card>        
+    </div>
+</div>
