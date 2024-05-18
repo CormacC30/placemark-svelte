@@ -2,12 +2,11 @@
   // @ts-ignore
   import Chart from "svelte-frappe-charts";
   import Card from "$lib/ui/Card.svelte";
-  import { subTitle, currentSession } from "$lib/stores";
+  import { subTitle, currentSession, siteList, placemarkStore } from "$lib/stores";
   import PlacemarkForm from "./PlacemarkForm.svelte";
   import PlacemarkList from "$lib/ui/PlacemarkList.svelte";
-  import type { Placemark, Session } from "$lib/types/placemark-types";
+  import type { Placemark, Session, Site } from "$lib/types/placemark-types";
   import type { ChartData } from "$lib/types/analytics-types";
-  import { placemarkStore } from "$lib/stores";
   import { onMount } from "svelte";
   import { placemarkService } from "$lib/services/placemark-service";
   import { categorisePlacemarks, getPlacemarkChartData } from "$lib/services/analytics";
@@ -18,6 +17,7 @@
 
   let session: Session;
   let placemarks: Placemark[] = [];
+  let sites: Site[] = []
   let placemarkChartData: ChartData | null = null;
   let map: LeafletMap;
 
@@ -49,8 +49,20 @@
   });
 
   placemarkStore.subscribe(async (newPlacemarks) => {
+
     placemarks = newPlacemarks;
     await updateChart();
+
+    siteList.subscribe(async (newSites) => {
+    sites = newSites;
+  });
+    for (const placemark of placemarks){
+      sites.forEach((site) => {
+        const popup = `${site.title}, Category: ${placemark.category}`;
+        map.addMarker(site.latitude, site.longitude, popup);
+      });
+    }
+    
   });
 </script>
 
