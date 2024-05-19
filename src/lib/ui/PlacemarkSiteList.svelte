@@ -6,9 +6,61 @@
   import type { Placemark, Site } from "$lib/types/placemark-types";
   import { currentSession, siteList } from "$lib/stores";
 
-  let placemark: Placemark | null = null;
+  import {CldUploadWidget} from "svelte-cloudinary";
+
+  let placemark: Placemark | null;
   let sites: Site[] = [];
   let isEmpty = true;
+  let info: string;
+  let error: string;
+
+    // Define the type for the result and widget parameters
+    interface UploadResult {
+    event: string;
+    info?: {
+      width: number;
+      height: number;
+      secure_url: string;
+    };
+    error?: {
+      message: string;
+    };
+  }
+
+  interface UploadWidget {
+    close: () => void;
+  }
+
+function onUpload(result: UploadResult, widget: UploadWidget, siteId: string) {
+    if (result.event === "success" && result.info) {
+      info = result.info.secure_url;
+      console.log(info);
+      // Call a function to save the URL to the site
+      saveImageToSite(siteId, result.info.secure_url);
+    } else if (result.event === "error" && result.error) {
+      error = result.error.message;
+    }
+    widget.close();
+  }
+
+  async function saveImageToSite(siteId: string, imageUrl: string) {
+    const session = get(currentSession);
+    if (!session || !siteId) {
+      console.log("not a success, site id: " + siteId );
+        
+    return;
+    }
+    const success = await placemarkService.addImageToSite(session, siteId, imageUrl);
+    console.log("success: ");
+    if (success) {
+      const updatedSites = await placemarkService.getPlacemarkSites(session, { _id: placemark._id, name: '', category: '' });
+      siteList.set(updatedSites);
+      console.log("updated sites ", updatedSites);
+    } else {
+      console.error("Failed to add image to site");
+    }
+  }
+
 
   onMount(async () => {
     const session = get(currentSession);
@@ -60,6 +112,7 @@
     <th>Lng</th>
     <th>Description</th>
     <th></th>
+    <th></th>
   </thead>
   <tbody>
     {#each $siteList as site}
@@ -70,6 +123,18 @@
         <td>{site.latitude}</td>
         <td>{site.longitude}</td>
         <td>{site.description}</td>
+        <td>
+          <CldUploadWidget uploadPreset="iwgek4qx" let:open {onUpload} siteId={site._id} let:isLoading>
+            <button class="button is-info" on:click={open} disabled={isLoading}> Upload an Image </button>
+          </CldUploadWidget>
+          {#if error}
+          <p>{error}</p>
+        {/if}
+        {#if info}
+          <img src={info} alt="Uploaded Asset" />
+          <p>{info}</p>
+        {/if}
+        </td>
         <td>
           {#if site._id}
           <button class="button is-danger" on:click={() => deleteSite(site)}><i class="fas fa-trash"></i></button>

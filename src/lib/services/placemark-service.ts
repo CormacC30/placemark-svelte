@@ -143,4 +143,27 @@ export const placemarkService = {
       return false;
     }
   },
+
+  async addImageToSite(session: Session, siteId: string, imageUrl: string): Promise<boolean> {
+    try {
+      setAuthToken(session.token);
+      const response = await axios.patch(`${this.baseUrl}/api/sites/${siteId}/image`, { imageUrl });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Add image to site error:', error);
+      return false;
+    }
+  },
+
+
+  async updatePlacemarkImage(session: Session, placemarkId: string, imageUrl: string): Promise<boolean> {
+    try {
+      setAuthToken(session.token);
+      const response = await axios.put(`${this.baseUrl}/api/placemarks/${placemarkId}/image`, { image: imageUrl });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Update placemark image error:', error);
+      return false;
+    }
+  }
 };
