@@ -15,20 +15,26 @@
 
     console.log(`attempting to log in email: ${email} with password: ${password}`);
 
-    const sanitizedEmail = sanitizeInput(email);
-    const sanitizedPassword = sanitizeInput(password);
+    if (!validateEmail(email) && !validatePassword(password)) {
+      message = "Please enter a valid email address and password";
+      isSuccess = false;
+      return;
+    }
 
-    if (!validateEmail(sanitizedEmail)) {
+    if (!validateEmail(email)) {
       message = "Please enter a valid email address";
       isSuccess = false;
       return;
     }
 
-    if (!validatePassword(sanitizedPassword)) {
+    if (!validatePassword(password)) {
       message = "Password must be at least 6 characters long and contain /^[a-zA-Z0-9]{3,30}$/";
       isSuccess = false;
       return;
     }
+    
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
 
     let session = await placemarkService.login(sanitizedEmail, sanitizedPassword);
     if (session) {

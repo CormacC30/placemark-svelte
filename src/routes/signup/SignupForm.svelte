@@ -5,7 +5,7 @@
     import Message from "$lib/ui/Message.svelte";
     import { placemarkService } from "$lib/services/placemark-service";
     import type { User } from "$lib/types/placemark-types";
-    import { sanitizeInput } from "$lib/services/utils";
+    import { sanitizeInput, validateEmail, validatePassword } from "$lib/services/utils";
   
     let firstName = "";
     let lastName = "";
