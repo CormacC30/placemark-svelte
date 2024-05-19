@@ -8,6 +8,7 @@
 
   let placemark: Placemark | null = null;
   let sites: Site[] = [];
+  let isEmpty = true;
 
   onMount(async () => {
     const session = get(currentSession);
@@ -18,6 +19,15 @@
       siteList.set(sites);
     }
   });
+
+  siteList.subscribe(site => {
+    sites = site;
+    if(sites.length > 0){
+      isEmpty = false;
+    } else if (sites.length === 0) {
+      isEmpty = true;
+    }
+  })
 
   async function deleteSite(site: Site) {
     const session = get(currentSession);
@@ -35,6 +45,11 @@
 <h1>Placemark: {placemark?.name}</h1>
 <p>Category: {placemark?.category}</p>
 
+{#if isEmpty}
+<h3 class="message is-warning">
+  <p>You have no historic sites added for this placemark</p>
+</h3>
+{:else}
 <h2>Sites</h2>
 <table class="table is-fullwidth">
   <thead>
@@ -64,3 +79,4 @@
     {/each}
   </tbody>
 </table>
+{/if}

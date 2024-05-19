@@ -13,7 +13,7 @@
   import { get } from "svelte/store";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
 
-  subTitle.set("Create a New Placemark");
+  subTitle.set($currentSession.name + ", Welcome to Tombster");
 
   let session: Session;
   let placemarks: Placemark[] = [];
