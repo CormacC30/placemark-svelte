@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { page } from '$app/stores';
     import { placemarkService } from '$lib/services/placemark-service';
     import { get } from 'svelte/store';
     import type { Placemark, Site } from '$lib/types/placemark-types';
     import { currentSession, siteList } from '$lib/stores';
     import Coordinates from '$lib/ui/Coordinates.svelte';
+    import { sanitizeInput } from '$lib/services/utils';
 
     export let placemark: Placemark;
 
@@ -19,15 +19,21 @@
 
     async function addSite() {
       const session = get(currentSession);
+
+      const sanitizedTitle = sanitizeInput(newSiteTitle);
+      
+      const sanitizedEra = sanitizeInput(selectedEra); // probably unneccessary but I'll do it anyway
+      const sanitizedDescription = sanitizeInput(newSiteDescription);
+
       if (!session || !placemark._id) return;
   
       const site: Site = {
-        title: newSiteTitle,
-        description: newSiteDescription,
+        title: sanitizedTitle,
+        description: sanitizedDescription,
         latitude: latitude,
         longitude: longitude,
         year: newSiteYear,
-        era: selectedEra,
+        era: sanitizedEra,
         placemarkid: placemark._id, 
       };
   

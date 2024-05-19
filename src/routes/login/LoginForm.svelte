@@ -4,15 +4,21 @@
   import { currentSession } from "$lib/stores";
   import Message from "$lib/ui/Message.svelte";
   import UserCredentials from "$lib/ui/UserCredentials.svelte";
+  import { sanitizeInput } from "$lib/services/utils";
 
   let email = "";
   let password = "";
   let message = "";
   let isSuccess = false;
 
+
   async function login() {
+
     console.log(`attempting to log in email: ${email} with password: ${password}`);
-    let session = await placemarkService.login(email, password);
+
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+    let session = await placemarkService.login(sanitizedEmail, sanitizedPassword);
     if (session) {
       message = "Login Successful";
       isSuccess = true;

@@ -5,6 +5,7 @@
     import Message from "$lib/ui/Message.svelte";
     import { placemarkService } from "$lib/services/placemark-service";
     import type { User } from "$lib/types/placemark-types";
+    import { sanitizeInput } from "$lib/services/utils";
   
     let firstName = "";
     let lastName = "";
@@ -14,11 +15,18 @@
     let isSuccess = false;
   
     async function signup() {
+// sanitize the inputs
+
+      const sanitizedFirstName = sanitizeInput(firstName);
+      const sanitizedLastName = sanitizeInput(lastName);
+      const sanitizedEmail = sanitizeInput(email);
+      const sanitizedPassword = sanitizeInput(password);
+
       const user: User = {
-        firstName,
-        lastName,
-        email,
-        password
+        firstName: sanitizedFirstName,
+        lastName: sanitizedLastName,
+        email: sanitizedEmail,
+        password: sanitizedPassword
       };
 
       const success = await placemarkService.signup(user);

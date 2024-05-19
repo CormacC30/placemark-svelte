@@ -2,14 +2,19 @@
   import { placemarkService } from '$lib/services/placemark-service';
   import { currentSession, placemarkStore } from '$lib/stores';
   import { get } from 'svelte/store';
+  import { sanitizeInput } from '$lib/services/utils';
 
-  let name = '';
-  let category = '';
+  let inputName = '';
+  let inputCategory = '';
   let message = '';
   const categories = ['Bronze Age', 'Iron Age', 'Medieval'];
 
   async function addPlacemark() {
     const session = get(currentSession);
+
+    const name = sanitizeInput(inputName);
+    const category = sanitizeInput(inputCategory);
+
     if (!session || !session.token) {
       message = 'You must be logged in to add a placemark.';
       return;
@@ -27,8 +32,8 @@
 </script>
 
 <form on:submit|preventDefault={addPlacemark}>
-  <input bind:value={name} placeholder="Name of the Placemark" />
-  <select bind:value={category}>
+  <input bind:value={inputName} placeholder="Name of the Placemark" />
+  <select bind:value={inputCategory}>
     {#each categories as categoryOption}
       <option value={categoryOption}>{categoryOption}</option>
     {/each}
