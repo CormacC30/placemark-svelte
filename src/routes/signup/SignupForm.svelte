@@ -15,6 +15,25 @@
     let isSuccess = false;
   
     async function signup() {
+
+      if (!validateEmail(email) && !validatePassword(password)) {
+      message = "Please enter a valid email address and password";
+      isSuccess = false;
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      message = "Please enter a valid email address";
+      isSuccess = false;
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      message = "Password must be at least 6 characters long and contain /^[a-zA-Z0-9]{3,30}$/";
+      isSuccess = false;
+      return;
+    }
+
 // sanitize the inputs
 
       const sanitizedFirstName = sanitizeInput(firstName);
