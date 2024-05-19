@@ -8,11 +8,14 @@
   import { onMount } from "svelte";
   import { currentSession, subTitle } from "$lib/stores";
   import { get } from "svelte/store";
-  
+  import PlacemarkSiteList from "$lib/ui/PlacemarkSiteList.svelte";
+
   subTitle.set("Your Tombster Data");
 
   let siteCountsData: ChartData | null = null;
   let averageAgesData: ChartData | null = null;
+  let isEmptySites = true;
+  let isEmptyPlacemarks = true;
 
   onMount(async () => {
     const session = get(currentSession);
@@ -22,6 +25,11 @@
     for (const placemark of placemarks) {
       const placemarkSites = await placemarkService.getPlacemarkSites(session, placemark);
       sites.push(...placemarkSites);
+    }
+    if (sites.length > 0) {
+      isEmptySites = false;
+    } else if (sites.length === 0) {
+      isEmptySites = true;
     }
 
     const categories = categoriseSites(placemarks, sites);
@@ -35,15 +43,27 @@
 <div class="columns">
   <div class="column">
     <Card title="Sites Per Category">
-      {#if siteCountsData}
-        <Chart data={siteCountsData} type="pie" />
+      {#if isEmptySites}
+        <h3 class="message">
+          <p>No Chart Data Available</p>
+        </h3>
+      {:else if !isEmptySites}
+        {#if siteCountsData}
+          <Chart data={siteCountsData} type="pie" />
+        {/if}
       {/if}
     </Card>
   </div>
   <div class="column">
     <Card title="Average Age of Historic Site, by Category">
-      {#if averageAgesData}
-        <Chart data={averageAgesData} type="bar" />
+      {#if isEmptySites}
+        <h3 class="message">
+          <p>No Chart Data Available</p>
+        </h3>
+      {:else if !isEmptySites}
+        {#if averageAgesData}
+          <Chart data={averageAgesData} type="bar" />
+        {/if}
       {/if}
     </Card>
   </div>
