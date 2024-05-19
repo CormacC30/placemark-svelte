@@ -2,17 +2,30 @@
     import { onMount } from 'svelte';
     import { get } from 'svelte/store';
     import { placemarkService } from '$lib/services/placemark-service';
-    import { currentSession } from '$lib/stores';
-    import type { Site } from '$lib/types/placemark-types';
+    import { currentSession, siteList } from '$lib/stores';
+    import type { Site, Session } from '$lib/types/placemark-types';
   
     let sites: Site[] = [];
+    let isEmpty = true;
   
     onMount(async () => {
-      const session = get(currentSession);
+      const session: Session = get(currentSession);
+      const userid = session._id;
       if (session) {
         sites = await placemarkService.getUserSites(session);
+        siteList.set(sites);
+        
       }
     });
+
+    siteList.subscribe(site => {
+    sites = site;
+    if (sites.length > 0){
+          isEmpty = false;
+        } else if (sites.length === 0) {
+          isEmpty = true;
+        }
+  });
   
     async function deleteSite(site: Site) {
       const session = get(currentSession);
@@ -26,7 +39,14 @@
     }
   </script>
   
-  <h2>All Sites</h2>
+
+  {#if isEmpty}
+  <h3 class="message is-warning">
+    <p>You have no historic sites added</p>
+  </h3>
+  {:else}
+  <h2> All Sites: </h2>
+
   <table class="table is-fullwidth">
     <thead>
       <th>Title</th>
@@ -53,4 +73,4 @@
       {/each}
     </tbody>
   </table>
-  
+  {/if}

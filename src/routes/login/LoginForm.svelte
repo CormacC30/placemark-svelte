@@ -19,7 +19,7 @@
 
       setTimeout(() => {
         currentSession.set(session);
-      localStorage.placemark = JSON.stringify(session);
+        localStorage.placemark = JSON.stringify(session);
         goto("/dashboard");
       }, 1000);
     } else {

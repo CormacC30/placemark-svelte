@@ -20,6 +20,7 @@
   let sites: Site[] = [];
   let placemarkChartData: ChartData | null = null;
   let map: LeafletMap;
+  let isEmpty = true;
 
   async function updateChart() {
     const categories = categorisePlacemarks(placemarks);
@@ -44,12 +45,16 @@
         map.addMarker(site.latitude, site.longitude, popup);
       });
     }
-
   });
 
   placemarkStore.subscribe(async (newPlacemarks) => {
     placemarks = newPlacemarks;
     await updateChart();
+    if (placemarks.length > 0) {
+      isEmpty = false;
+    } else if (placemarks.length === 0) {
+      isEmpty = true;
+    }
   });
 
   siteList.subscribe(async (newSites) => {
@@ -83,8 +88,14 @@
   </div>
   <div class="column">
     <Card title="Number of Placemarks per Category">
-      {#if placemarkChartData}
-        <Chart data={placemarkChartData} type="pie" />
+      {#if isEmpty}
+        <h3 class="message">
+          <p>Please Add Placemarks to view chart data</p>
+        </h3>
+      {:else if !isEmpty}
+        {#if placemarkChartData}
+          <Chart data={placemarkChartData} type="pie" />
+        {/if}
       {/if}
     </Card>
   </div>

@@ -11,6 +11,7 @@
   let placemarks: Placemark[] = [];
   let isModalOpen = false;
   let selectedPlacemark: Placemark | null = null;
+  let isEmpty = true;
 
   function navigateToPlacemark(id: string | undefined) {
     goto(`/placemark/${id}`);
@@ -30,6 +31,17 @@
     const session = get(currentSession);
     placemarks = await placemarkService.getPlacemarks(session);
     placemarkStore.set(placemarks);  // Update the store
+
+  });
+
+  placemarkStore.subscribe(placemark => {
+    placemarks = placemark;
+    if(placemarks.length > 0){
+      isEmpty = false;
+    } else if (placemarks.length === 0) {
+      isEmpty = true;
+    }
+// changes the isEmpty flag 
   });
 
   async function deletePlacemark(placemark: Placemark) {
@@ -46,6 +58,12 @@
 
 </script>
 
+
+{#if isEmpty}
+<h3 class="message is-warning">
+  <p>You have no places of interest added</p>
+</h3>
+{:else}
 <table class="table is-fullwidth">
   <thead>
     <th>Name</th>
@@ -82,6 +100,7 @@
     {/each}
   </tbody>
 </table>
+{/if}
 
 <Modal bind:isOpen={isModalOpen} title="Add Site" close={closeModal}>
   {#if selectedPlacemark}
