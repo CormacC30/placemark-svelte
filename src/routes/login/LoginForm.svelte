@@ -11,6 +11,25 @@
   let message = "";
   let isSuccess = false;
 
+  function validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    if (!emailRegex.test(email)) {
+      message = "Please enter a valid email address";
+      isSuccess = false;
+      return false;
+    }
+    return true;
+  }
+
+  function validatePassword(password: string): boolean {
+    const passwordRegex = /^[a-zA-Z0-9]{3,30}$/;
+    if (password.length < 6 || !passwordRegex.test) {
+      message = "Password must be at least 6 characters long";
+      isSuccess = false;
+      return false;
+    }
+    return true;
+  }
 
   async function login() {
 
@@ -18,6 +37,11 @@
 
     const sanitizedEmail = sanitizeInput(email);
     const sanitizedPassword = sanitizeInput(password);
+
+    if (!validateEmail(sanitizedEmail) || !validatePassword(sanitizedPassword)) {
+      return;
+    }
+
     let session = await placemarkService.login(sanitizedEmail, sanitizedPassword);
     if (session) {
       message = "Login Successful";
@@ -27,7 +51,7 @@
         currentSession.set(session);
         localStorage.placemark = JSON.stringify(session);
         goto("/dashboard");
-      }, 1000);
+      }, 500);
     } else {
       (email = ""), (password = ""), (message = "Invalid Credentials");
     }
