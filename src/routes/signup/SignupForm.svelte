@@ -56,7 +56,11 @@
         goto("/login");
       }, 2000);
       } else {
-        message = "Error Trying to sign up";
+        message = "Error Trying to sign up",
+        firstName = "",
+        lastName = "",
+        email = "",
+        password = "";
       }
     }
   </script>

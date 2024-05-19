@@ -8,9 +8,11 @@ export function setAuthToken(token: string) {
 export const placemarkService = {
   baseUrl: "http://localhost:3000",
 
-  async signup(user: User): Promise<boolean> {
+  async signup(user: User): Promise< User | boolean> {
     try {
+      console.log("Payload being sent to server:", user);
       const response = await axios.post(`${this.baseUrl}/api/users`, user);
+      console.log("response: ", response); 
       return response.data.success === true;
     } catch (error) {
       console.error('Signup error:', error);
