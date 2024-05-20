@@ -114,6 +114,7 @@ export const placemarkService = {
     try {
       setAuthToken(session.token);
       const response = await axios.post(`${this.baseUrl}/api/placemarks/${placemark._id}/sites`, site);
+      console.log("response", response);
       return response.status === 200 || response.status === 201;
     } catch (error) {
       console.error('Add site error:', error);

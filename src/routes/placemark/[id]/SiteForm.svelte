@@ -16,7 +16,7 @@
   let latitude = 0;
   let longitude = 0;
   let newSiteDescription = "";
-  let img = "";
+  // let img = "";
   let message = "";
   let isSuccess: boolean | undefined = true;
 
@@ -80,7 +80,7 @@
       longitude: longitude,
       year: newSiteYear,
       era: sanitizedEra,
-      img: img,
+      // img: img,
       placemarkid: placemark._id
     };
 
