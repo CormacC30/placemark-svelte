@@ -5,6 +5,7 @@
   import { get } from "svelte/store";
   import type { Placemark, Site } from "$lib/types/placemark-types";
   import { currentSession, siteList } from "$lib/stores";
+  import UploadWidget from "./UploadWidget.svelte";
 
   let placemark: Placemark | null = null;
   let sites: Site[] = [];
@@ -12,9 +13,9 @@
 
   onMount(async () => {
     const session = get(currentSession);
-    const { id } = get(page).params;
+    const  id  = get(page).params.id;
     if (session && id) {
-      placemark = await placemarkService.getPlacemarkById(session, { _id: id, name: "", category: "" });
+      placemark = { _id: id, name: "", category: "" };
       sites = await placemarkService.getPlacemarkSites(session, { _id: id, name: "", category: "" });
       siteList.set(sites);
     }
@@ -22,16 +23,12 @@
 
   siteList.subscribe(site => {
     sites = site;
-    if(sites.length > 0){
-      isEmpty = false;
-    } else if (sites.length === 0) {
-      isEmpty = true;
-    }
-  })
+    isEmpty = sites.length === 0;
+  });
 
   async function deleteSite(site: Site) {
     const session = get(currentSession);
-    if (!session || !site._id) return; 
+    if (!session || !site._id) return;
     const success = await placemarkService.deleteSite(session, site._id);
     if (success) {
       sites = sites.filter((s) => s._id !== site._id);
@@ -43,40 +40,49 @@
 </script>
 
 <h1>Placemark: {placemark?.name}</h1>
-<p>Category: {placemark?.category}</p>
+<h2>Category: {placemark?.category}</h2>
 
 {#if isEmpty}
-<h3 class="message is-warning">
-  <p>You have no historic sites added for this placemark</p>
-</h3>
+  <h3 class="message is-warning">
+    <p>You have no historic sites added for this placemark</p>
+  </h3>
 {:else}
-<h2>Sites</h2>
-<table class="table is-fullwidth">
-  <thead>
-    <th>Title</th>
-    <th>Year</th>
-    <th>era</th>
-    <th>Lat</th>
-    <th>Lng</th>
-    <th>Description</th>
-    <th></th>
-  </thead>
-  <tbody>
-    {#each $siteList as site}
-      <tr>
-        <td>{site.title}</td>
-        <td>{site.year}</td>
-        <td>{site.era}</td>
-        <td>{site.latitude}</td>
-        <td>{site.longitude}</td>
-        <td>{site.description}</td>
-        <td>
-          {#if site._id}
-          <button class="button is-danger" on:click={() => deleteSite(site)}><i class="fas fa-trash"></i></button>
-          {/if}
-        </td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+  <h2>Sites</h2>
+  <table class="table is-fullwidth">
+    <thead>
+      <th>Title</th>
+      <th>Year</th>
+      <th>era</th>
+      <th>Lat</th>
+      <th>Lng</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th></th>
+    </thead>
+    <tbody>
+      {#each $siteList as site}
+        <tr>
+          <td>{site.title}</td>
+          <td>{site.year}</td>
+          <td>{site.era}</td>
+          <td>{site.latitude}</td>
+          <td>{site.longitude}</td>
+          <td>{site.description}</td>
+          <td>
+            {#if site._id}
+              <UploadWidget siteId={site._id} />
+            {/if}
+            {#if site.img}
+            <img src={site.img} alt="uploaded asset">
+            {/if}
+          </td>
+          <td>
+            {#if site._id}
+              <button class="button is-danger" on:click={() => deleteSite(site)}><i class="fas fa-trash"></i></button>
+            {/if}
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
 {/if}

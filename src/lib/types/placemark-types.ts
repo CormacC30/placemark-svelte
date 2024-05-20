@@ -21,6 +21,7 @@ export interface Site {
     era: string;
     placemarkid: string;
     _id?: string;
+    img: string;
   }
   
   export interface Placemark {

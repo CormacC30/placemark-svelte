@@ -18,7 +18,7 @@
     const pageData = get(page);
     if (session && pageData.params) {
       const id = pageData.params.id;
-      placemark = await placemarkService.getPlacemarkById(session, { _id: id, name: '', category: '' });
+      placemark = { _id: id, name: '', category: '' };
     }
   });
 </script>

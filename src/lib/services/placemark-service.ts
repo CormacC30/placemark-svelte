@@ -78,17 +78,16 @@ export const placemarkService = {
     }
   },
 
-  async getPlacemarkById(session: Session, placemark: Placemark): Promise<Placemark | null> {
+  async getPlacemarkById(session: Session, id: string): Promise<Placemark | null> {
     try {
       setAuthToken(session.token);
-      const response = await axios.get(`${this.baseUrl}/api/placemarks/${placemark._id}`);
+      const response = await axios.get(`${this.baseUrl}/api/placemarks/${id}`);
       return response.data;
     } catch (error) {
       console.error('Get placemark by ID error:', error);
       return null;
     }
   },
-
   async getPlacemarkSites(session: Session, placemark: Placemark): Promise<Site[]> {
     try {
       setAuthToken(session.token);
@@ -122,14 +121,18 @@ export const placemarkService = {
     }
   },
 
-  async getOneSite(session: Session, site: Site): Promise<Site | null> {
+  async getOneSite(session: Session, siteId: string): Promise<Site> {
     try {
       setAuthToken(session.token);
-      const response = await axios.get(`${this.baseUrl}/api/sites/${site._id}`);
-      return response.data;
+      const response = await axios.get(`${this.baseUrl}/api/sites/${siteId}`);
+      if (response.data) {
+        return response.data as Site;
+      } else {
+        throw new Error('Site not found');
+      }
     } catch (error) {
       console.error('Get one site error:', error);
-      return null;
+      throw new Error(`Unable to retrieve site: `);
     }
   },
 
@@ -140,6 +143,16 @@ export const placemarkService = {
       return response.status === 204;
     } catch (error) {
       console.error('Delete site error:', error);
+      return false;
+    }
+  },
+
+  async addImageToSite(siteId: string, imageUrl: string): Promise<boolean> {
+    try {
+      const response = await axios.put(`${this.baseUrl}/api/sites/${siteId}/image`, { siteId, imageUrl });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Add image to site error:', error);
       return false;
     }
   },

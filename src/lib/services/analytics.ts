@@ -1,5 +1,6 @@
-import type { Placemark, Site } from "$lib/types/placemark-types";
+import type { Placemark, Site, Session } from "$lib/types/placemark-types";
 import type { Categories, ChartData, SiteWithCategory } from "$lib/types/analytics-types";
+import { placemarkService } from "./placemark-service";
 
 export function getSiteAge(site: Site) {
   let correctYear = 0;
@@ -103,4 +104,27 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
     });
   
     return result;
+  }
+
+  export async function getPlacemarkforSiteId(session: Session, siteId: string): Promise<Placemark | null> {
+    try {
+      const site: Site | null = await placemarkService.getOneSite(session, siteId);
+      if (!site) {
+        console.error("Site not found");
+        return null;
+      }
+  
+      const placemarks: Placemark[] = await placemarkService.getPlacemarks(session);
+      const placemark = placemarks.find(placemark => placemark._id === site.placemarkid);
+      
+      if (!placemark) {
+        console.error("Placemark not found for site");
+        return null;
+      }
+  
+      return placemark;
+    } catch (error) {
+      console.error("Error retrieving placemark for site:", error);
+      return null;
+    }
   }
