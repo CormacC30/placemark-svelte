@@ -9,7 +9,7 @@
   import type { ChartData } from "$lib/types/analytics-types";
   import { onMount } from "svelte";
   import { placemarkService } from "$lib/services/placemark-service";
-  import { categorisePlacemarks, getPlacemarkChartData } from "$lib/services/analytics";
+  import { categorisePlacemarks, getPlacemarkChartData, getSitesWithCategories } from "$lib/services/analytics";
   import { get } from "svelte/store";
   import LeafletMap from "$lib/ui/LeafletMap.svelte";
 
@@ -39,12 +39,12 @@
       await updateChart();
     }
 
-    for (const placemark of mapPlacemarks) {
-      sites.forEach((site) => {
-        popup = `${site.title}, Category: ${placemark.category}`;
-        map.addMarker(site.latitude, site.longitude, popup);
-      });
-    }
+    const sitesCategories = getSitesWithCategories(mapPlacemarks, sites);
+        
+    sitesCategories.forEach((siteCat) => {
+      const popup = `${siteCat.site.title}, Category: ${siteCat.category}`;
+      map.addMarker(siteCat.site.latitude, siteCat.site.longitude, popup, siteCat.category )
+    });
   });
 
   placemarkStore.subscribe(async (newPlacemarks) => {
@@ -59,10 +59,13 @@
 
   siteList.subscribe(async (newSites) => {
     sites = newSites;
-    sites.forEach((site) => {
-      const popup = `${site.title}`;
-      map.addMarker(site.latitude, site.longitude, popup);
+    const sitesCategories = getSitesWithCategories(placemarks, newSites);
+        
+    sitesCategories.forEach((siteCat) => {
+      const popup = `${siteCat.site.title}, Category: ${siteCat.category}`;
+      map.addMarker(siteCat.site.latitude, siteCat.site.longitude, popup, siteCat.category )
     });
+
     const lastSite = sites[sites.length - 1];
     if (lastSite) map.moveTo(lastSite.latitude, lastSite.longitude);
   });
