@@ -14,6 +14,12 @@ export interface ChartData {
     datasets: { values: number[] }[];
   }
   
+  export interface NewChartData {
+    labels: string[];
+    datasets: { name: string, type: string, values: number[] }[];
+  }
+  
+  
  export interface SiteWithCategory {
     site: Site;
     category: string;

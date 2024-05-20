@@ -128,3 +128,30 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
       return null;
     }
   }
+
+  export function getAllByCategory(placemarks: Placemark[], sites: Site[]): { labels: string[], placemarkCounts: number[], siteCounts: number[] } {
+    const categoryMap: { [key: string]: { placemarks: number, sites: number } } = {};
+  
+    placemarks.forEach(placemark => {
+      if (!categoryMap[placemark.category]) {
+        categoryMap[placemark.category] = { placemarks: 0, sites: 0 };
+      }
+      categoryMap[placemark.category].placemarks += 1;
+    });
+  
+    sites.forEach(site => {
+      const placemark = placemarks.find(placemark => placemark._id === site.placemarkid);
+      if (placemark) {
+        if (!categoryMap[placemark.category]) {
+          categoryMap[placemark.category] = { placemarks: 0, sites: 0 };
+        }
+        categoryMap[placemark.category].sites += 1;
+      }
+    });
+  
+    const labels = Object.keys(categoryMap);
+    const placemarkCounts = labels.map(label => categoryMap[label].placemarks);
+    const siteCounts = labels.map(label => categoryMap[label].sites);
+  
+    return { labels, placemarkCounts, siteCounts };
+  }
