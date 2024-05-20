@@ -125,6 +125,7 @@ export const placemarkService = {
   async getOneSite(session: Session, siteId: string): Promise<Site> {
     try {
       setAuthToken(session.token);
+      console.log("site ID:", siteId);
       const response = await axios.get(`${this.baseUrl}/api/sites/${siteId}`);
       if (response.data) {
         return response.data as Site;
@@ -157,4 +158,15 @@ export const placemarkService = {
       return false;
     }
   },
+
+  async deleteSiteImage(session: Session, siteId: string): Promise<boolean> {
+    try {
+      setAuthToken(session.token);
+      const response = await axios.put(`${this.baseUrl}/api/sites/${siteId}/image`, { siteId });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Remove image from site error:', error);
+      return false;
+    }
+  }
 };

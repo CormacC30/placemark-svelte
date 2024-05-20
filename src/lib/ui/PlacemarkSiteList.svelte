@@ -37,6 +37,19 @@
       console.error("Failed to delete site");
     }
   }
+
+  async function deleteImage(siteId: string | undefined) {
+    const session = get(currentSession);
+    if (!session || !siteId) return;
+    const success = await placemarkService.deleteSiteImage(session, siteId);
+    if (success) {
+      const updatedSites = await placemarkService.getPlacemarkSites(session, placemark as Placemark);
+      siteList.set(updatedSites);
+      console.log("Image removed successfully");
+    } else {
+      console.error("Failed to remove image from site");
+    }
+  }
 </script>
 
 <h1>Placemark: {placemark?.name}</h1>
@@ -71,9 +84,10 @@
           <td>
             {#if site._id}
               <UploadWidget siteId={site._id} />
-            {/if}
+              {/if}
             {#if site.img}
             <img src={site.img} alt="uploaded asset">
+            <button class="button is-danger is-small" on:click={() => deleteImage(site._id)}>Delete Image</button>
             {/if}
           </td>
           <td>

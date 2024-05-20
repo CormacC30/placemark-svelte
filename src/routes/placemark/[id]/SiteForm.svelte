@@ -80,7 +80,7 @@
       longitude: longitude,
       year: newSiteYear,
       era: sanitizedEra,
-      // img: img,
+      //img: img,
       placemarkid: placemark._id
     };
 

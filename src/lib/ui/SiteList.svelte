@@ -3,7 +3,7 @@
     import { get } from 'svelte/store';
     import { placemarkService } from '$lib/services/placemark-service';
     import { currentSession, siteList } from '$lib/stores';
-    import type { Site, Session } from '$lib/types/placemark-types';
+    import type { Site, Session, Placemark } from '$lib/types/placemark-types';
     import UploadWidget from './UploadWidget.svelte';
   
     let sites: Site[] = [];
@@ -15,7 +15,6 @@
       if (session) {
         sites = await placemarkService.getUserSites(session);
         siteList.set(sites);
-        
       }
     });
 
@@ -38,6 +37,21 @@
         console.error("Failed to delete site");
       }
     }
+
+    async function deleteImage(siteId: string |undefined) {
+    const session = get(currentSession);
+    const site = await placemarkService.getOneSite(session, siteId as string);
+    const placemark = { _id: site._id, name: "", category: "" };
+    if (!session || !siteId) return;
+    const success = await placemarkService.deleteSiteImage(session, siteId);
+    if (success) {
+      const updatedSites = await placemarkService.getUserSites(session);
+      siteList.set(updatedSites);
+      console.log("Image removed successfully");
+    } else {
+      console.error("Failed to remove image from site");
+    }
+  }
   </script>
   
 
@@ -70,11 +84,12 @@
           <td>{site.description}</td>
           <td>
             {#if site._id}
-            <UploadWidget siteId={site._id} />
-          {/if}
-          {#if site.img}
-          <img src={site.img} alt="uploaded asset">
-          {/if}
+              <UploadWidget siteId={site._id} />
+              {/if}
+            {#if site.img}
+            <img src={site.img} alt="uploaded asset">
+            <button class="button is-danger is-small" on:click={() => deleteImage(site._id)}>Delete Image</button>
+            {/if}
         </td>
 
           <td>
