@@ -4,7 +4,7 @@
   import { placemarkService } from "$lib/services/placemark-service";
   import { get } from "svelte/store";
   import type { Placemark, Site } from "$lib/types/placemark-types";
-  import { currentSession, siteList } from "$lib/stores";
+  import { currentSession, siteList, subTitle } from "$lib/stores";
   import UploadWidget from "./UploadWidget.svelte";
 
   let placemark: Placemark | null = null;
@@ -14,10 +14,12 @@
   onMount(async () => {
     const session = get(currentSession);
     const  id  = get(page).params.id;
+    const thisPlaceMark = await placemarkService.getPlacemarkById(session, id) as Placemark;
     if (session && id) {
       placemark = { _id: id, name: "", category: "" };
       sites = await placemarkService.getPlacemarkSites(session, { _id: id, name: "", category: "" });
       siteList.set(sites);
+      subTitle.set(thisPlaceMark.name + ", " + thisPlaceMark.category);
     }
   });
 
@@ -51,9 +53,6 @@
     }
   }
 </script>
-
-<h1>Placemark: {placemark?.name}</h1>
-<h2>Category: {placemark?.category}</h2>
 
 {#if isEmpty}
   <h3 class="message is-warning">
