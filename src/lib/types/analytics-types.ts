@@ -14,3 +14,7 @@ export interface ChartData {
     datasets: { values: number[] }[];
   }
   
+ export interface SiteWithCategory {
+    site: Site;
+    category: string;
+  }

@@ -1,5 +1,5 @@
 import type { Placemark, Site } from "$lib/types/placemark-types";
-import type { Categories, ChartData } from "$lib/types/analytics-types";
+import type { Categories, ChartData, SiteWithCategory } from "$lib/types/analytics-types";
 
 export function getSiteAge(site: Site) {
   let correctYear = 0;
@@ -86,4 +86,21 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
       labels,
       datasets: [{ values }],
     };
+  }
+
+  export function getSitesWithCategories(placemarks: Placemark[], sites: Site[]): SiteWithCategory[] {
+    const result: SiteWithCategory[] = [];
+  
+    placemarks.forEach((placemark) => {
+      const placemarkSites = sites.filter(site => site.placemarkid === placemark._id);
+  
+      placemarkSites.forEach((site) => {
+        result.push({
+          site: site,
+          category: placemark.category
+        });
+      });
+    });
+  
+    return result;
   }

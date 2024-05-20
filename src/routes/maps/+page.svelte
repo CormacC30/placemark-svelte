@@ -9,7 +9,7 @@
   import { placemarkService } from "$lib/services/placemark-service";
   import { currentSession } from "$lib/stores";
   import { subTitle } from "$lib/stores";
-  import { categoriseSites } from "$lib/services/analytics";
+  import { categoriseSites, getSitesWithCategories } from "$lib/services/analytics";
 
   subTitle.set("Tombster Geo Data");
   let map: LeafletMap;
@@ -19,12 +19,13 @@
     const sites = await placemarkService.getUserSites(get(currentSession));
     let popup: string;
 
-    for (const placemark of placemarks) {
-      sites.forEach((site) => {
-        popup = `${site.title}, Category: ${placemark.category}`;
-        map.addMarker(site.latitude, site.longitude, popup);
-      }); 
-    }
+    const sitesCategories = getSitesWithCategories(placemarks, sites);
+
+    sitesCategories.forEach((siteCat) => {
+      popup = `${siteCat.site.title}, Category: ${siteCat.category}`
+      map.addMarker(siteCat.site.latitude, siteCat.site.longitude, popup, siteCat.category )
+    })
+
     const lastSite = sites[sites.length -1];
     if (lastSite) map.moveTo(lastSite.latitude, lastSite.longitude);
   });
