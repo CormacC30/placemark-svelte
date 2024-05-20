@@ -7,6 +7,7 @@
   let inputName = '';
   let inputCategory = '';
   let message = '';
+  let isSuccess = true;
   const categories = ['Bronze Age', 'Iron Age', 'Medieval', 'Industrial Revolution', 'Famine', 'Early Christian', 'Neolithic Period', 'Mesolithic Period', 'War of Independance', 'Civil War' ];
 
   async function addPlacemark() {
@@ -24,8 +25,10 @@
     if (success) {
       const updatedPlacemarks = await placemarkService.getPlacemarks(session);
       placemarkStore.set(updatedPlacemarks);
+      isSuccess = false;
       message = `Thanks! You have added ${name} (${category})`;
     } else {
+      isSuccess = false;
       message = 'Placemark could not be successfully added - some error occurred';
     }
   }
@@ -41,9 +44,10 @@
   <button class="button is-success">Add Placemark</button>
 
 </form>
-
+{#if !isSuccess}
 <div class="box mt-5">
   <div class="content has-text-centered">
     {message}
   </div>
 </div>
+{/if}

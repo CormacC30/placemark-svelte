@@ -2,7 +2,7 @@
     import { currentSession } from "$lib/stores";
   </script>
   
-  <nav class="navbar is-full-width">
+  <nav class="navbar is-full-width has-background-white-ter">
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="/dashboard">

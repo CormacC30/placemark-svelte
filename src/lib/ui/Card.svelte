@@ -2,7 +2,7 @@
   export let title = "";
 </script>
 
-<div class="card mb-5">
+<div class="card mb-5 has-background-warning-light">
   <header class="card-header">
     <p class="card-header-title">
       <span class="icon"><i class="fas fa-monument"></i></span><span>{title}</span>

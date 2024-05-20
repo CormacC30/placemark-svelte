@@ -14,7 +14,7 @@
 
 </script>
 
-<div class="container">
+<div class="container has-background-white-ter">
     {#if $currentSession?.token }
     <Menu />
     <Heading />

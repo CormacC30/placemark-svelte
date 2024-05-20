@@ -5,12 +5,13 @@
     import { placemarkService } from "$lib/services/placemark-service";
     import type { Site } from "$lib/types/placemark-types";
     import { configDotenv } from "dotenv";
-   // import { VITE_PUBLIC_CLOUDINARY_CLOUD_NAME, VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET } from "$env/static/public";
+   
+    // import { VITE_PUBLIC_CLOUDINARY_CLOUD_NAME, VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET } from "$env/static/public";
 
     export let siteId: string;
 
-    const cloudName = process.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = process.env.VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+    // const cloudName = VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    // const uploadPreset = VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
     
     let widget: any;
   
@@ -44,13 +45,13 @@
     }
   
     onMount(() => {
-        console.log("cloud name", cloudName);
-        console.log("upload preset", uploadPreset);
+      //  console.log("cloud name", cloudName);
+      //  console.log("upload preset", uploadPreset);
       if ('cloudinary' in window) {
         widget = (window as any).cloudinary.createUploadWidget(
           {
-            cloudName: cloudName, 
-            uploadPreset: uploadPreset, 
+            cloudName: "duody0ajh", // cloudName, 
+            uploadPreset: "new_private_pr3s3t" // uploadPreset, 
           },
           onUpload
         );
