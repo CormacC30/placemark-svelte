@@ -77,7 +77,7 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
   
     return categories;
   }
-  
+  // 
   export function getPlacemarkChartData(categories: { [key: string]: number }): ChartData {
     const labels = Object.keys(categories);
     const values = Object.values(categories);
@@ -87,7 +87,7 @@ export function categoriseSites(placemarks: Placemark[], sites: Site[]): Categor
       datasets: [{ values }],
     };
   }
-
+// Returns array of objects with site and associated category
   export function getSitesWithCategories(placemarks: Placemark[], sites: Site[]): SiteWithCategory[] {
     const result: SiteWithCategory[] = [];
   
