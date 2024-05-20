@@ -4,9 +4,13 @@
     import { currentSession, siteList } from "$lib/stores";
     import { placemarkService } from "$lib/services/placemark-service";
     import type { Site } from "$lib/types/placemark-types";
+   // import { VITE_PUBLIC_CLOUDINARY_CLOUD_NAME, VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET } from "$env/static/public";
   
     export let siteId: string;
-  
+
+    const cloudName = process.env.VITE_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.VITE_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
     let widget: any;
   
     function onUpload(error: any, result: any) {
@@ -42,8 +46,8 @@
       if ('cloudinary' in window) {
         widget = (window as any).cloudinary.createUploadWidget(
           {
-            cloudName: "duody0ajh",
-            uploadPreset: "iwgek4qx",
+            cloudName: cloudName, // "duody0ajh",
+            uploadPreset: uploadPreset, // "new_upload_preset_private",
           },
           onUpload
         );

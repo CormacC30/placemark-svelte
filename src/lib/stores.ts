@@ -6,4 +6,5 @@ export const subTitle = writable<string>();
 export const currentSession = writable<Session>();
 export const placemarkStore = writable<Placemark[]>([]);
 export const siteList = writable<Site[]>([]);
+export const CategoryList = writable<string[]>([]);
 

@@ -4,6 +4,7 @@
     import { placemarkService } from '$lib/services/placemark-service';
     import { currentSession, siteList } from '$lib/stores';
     import type { Site, Session } from '$lib/types/placemark-types';
+    import UploadWidget from './UploadWidget.svelte';
   
     let sites: Site[] = [];
     let isEmpty = true;
@@ -55,6 +56,7 @@
       <th>Lat</th>
       <th>Lng</th>
       <th>Description</th>
+      <th>Images</th>
       <th>Actions</th>
     </thead>
     <tbody>
@@ -66,6 +68,15 @@
           <td>{site.latitude}</td>
           <td>{site.longitude}</td>
           <td>{site.description}</td>
+          <td>
+            {#if site._id}
+            <UploadWidget siteId={site._id} />
+          {/if}
+          {#if site.img}
+          <img src={site.img} alt="uploaded asset">
+          {/if}
+        </td>
+
           <td>
             <button class="button is-danger" on:click={() => deleteSite(site)}><i class="fas fa-trash"></i></button>
           </td>

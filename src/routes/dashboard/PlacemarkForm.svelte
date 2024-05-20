@@ -7,7 +7,7 @@
   let inputName = '';
   let inputCategory = '';
   let message = '';
-  const categories = ['Bronze Age', 'Iron Age', 'Medieval'];
+  const categories = ['Bronze Age', 'Iron Age', 'Medieval', 'Industrial Revolution', 'Famine', 'Early Christian', 'Neolithic Period', 'Mesolithic Period', 'War of Independance', 'Civil War' ];
 
   async function addPlacemark() {
     const session = get(currentSession);
@@ -38,7 +38,8 @@
       <option value={categoryOption}>{categoryOption}</option>
     {/each}
   </select>
-  <button class="is-warning is-fullwidth">Add Placemark</button>
+  <button class="button is-success">Add Placemark</button>
+
 </form>
 
 <div class="box mt-5">
