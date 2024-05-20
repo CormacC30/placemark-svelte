@@ -46,8 +46,8 @@
       if ('cloudinary' in window) {
         widget = (window as any).cloudinary.createUploadWidget(
           {
-            cloudName: cloudName, // "duody0ajh",
-            uploadPreset: uploadPreset, // "new_upload_preset_private",
+            cloudName: cloudName, 
+            uploadPreset: uploadPreset, 
           },
           onUpload
         );
