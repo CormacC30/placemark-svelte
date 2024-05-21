@@ -34,28 +34,34 @@
   }
 </script>
 
-<div class="box field is-horizontal">
-  <div class="field-label is-normal">
-    <label for="Placemark Name" class="label">Name</label>
-  </div>
-  <div class="field-body">
+<div class="box">
+  <form on:submit|preventDefault={addPlacemark} class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label for="Placemark Name" class="label">Name</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <p class="control is-expanded">
+          <input id="Name" class="input" type="text" bind:value={inputName} placeholder="Name of the Placemark">
+        </p>
+      </div>
+      <div class="field-label is-normal">
+        <label for="Category" class="label">Category</label>
+      </div>
+      <div class="field center">
+        <select bind:value={inputCategory}>
+          {#each categories as categoryOption}
+            <option value={categoryOption}>{categoryOption}</option>
+          {/each}
+        </select>
+      </div>
+    </div>
     <div class="field">
-      <p class="control is-expanded">
-        <input id="Name" class="input" type="string" bind:value={inputName} Placeholder="Name of the Placemark">
+      <p class="control">
+        <button type="submit" class="button is-success">Add Placemark</button>
       </p>
     </div>
-    <div class="field-label is-normal">
-      <label for="Category" class="label">Category</label>
-    </div>
-    <div class="field center">
-      <select bind:value={inputCategory}>
-        {#each categories as categoryOption}
-          <option value={categoryOption}>{categoryOption}</option>
-        {/each}
-      </select>
-    </div>
-  </div>
-  <button on:submit|preventDefault={addPlacemark} class="button is-success">Add Placemark</button>
+  </form>
 </div>
 
 

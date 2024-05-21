@@ -59,3 +59,4 @@
   <UserCredentials bind:email bind:password />
   <button class="button is-success is-fullwidth">Log In</button>
 </form>
+<p class="has-text-centered">Don't have an account? <a href="/signup" data-cy="signup-redirect">Sign Up Here</a></p>

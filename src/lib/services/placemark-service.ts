@@ -6,8 +6,8 @@ export function setAuthToken(token: string) {
 }
 
 export const placemarkService = {
-  baseUrl: "https://placemark-r77h.onrender.com", // "http://localhost:3000",
-
+  baseUrl: "https://placemark-r77h.onrender.com", //"http://localhost:3000", // 
+ 
   async signup(user: User): Promise< User | boolean> {
     try {
       console.log("Payload being sent to server:", user);
