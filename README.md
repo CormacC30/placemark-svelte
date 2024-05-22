@@ -1,5 +1,5 @@
 # Welcome to Tombster App
-<img src="/src/static/newgrange.jpg">
+<img src="/static/newgrange.jpg">
 
 # Description
 
